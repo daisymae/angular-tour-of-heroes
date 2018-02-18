@@ -18,15 +18,24 @@ export class HeroesComponent implements OnInit {
     this.getHeroes();
   }
 
+  /* using observables; note the 'subscribe'
+  This asynchronous approach will work when the
+  HeroService requests heroes from the server.
+  This also works with mock data.
+  */
   getHeroes(): void {
-    /*
-    This will not work in a real app.
-    You're getting away with it now because the service currently returns mock heroes.
-    But soon the app will fetch heroes from a remote server, which is an inherently asynchronous operation.
-    */
-    this.heroes = this.heroService.getHeroes();
+    this.heroService.getHeroes()
+        .subscribe(heroes => this.heroes = heroes);
   }
 
+  /* original; non-observable method.
+  This will not work in a real app.
+    You're getting away with it now because the service currently returns mock heroes.
+    But soon the app will fetch heroes from a remote server, which is an inherently asynchronous operation.
+  getHeroes(): void {
+    this.heroes = this.heroService.getHeroes();
+  }
+*/
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
   }
