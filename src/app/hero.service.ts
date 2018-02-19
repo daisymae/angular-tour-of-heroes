@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Hero } from './hero';
-import { HEROES } from './mock-heroes';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { MessageService } from './message.service';
@@ -87,38 +86,16 @@ export class HeroService {
   }
 
   /* GET heroes whose name contains search term */
-searchHeroes(term: string): Observable<Hero[]> {
-  if (!term.trim()) {
-    // if not search term, return empty hero array.
-    return of([]);
+  searchHeroes(term: string): Observable<Hero[]> {
+    if (!term.trim()) {
+      // if not search term, return empty hero array.
+      return of([]);
+    }
+    return this.http.get<Hero[]>(`api/heroes/?name=${term}`).pipe(
+      tap(_ => this.log(`found heroes matching "${term}"`)),
+      catchError(this.handleError<Hero[]>('searchHeroes', []))
+    );
   }
-  return this.http.get<Hero[]>(`api/heroes/?name=${term}`).pipe(
-    tap(_ => this.log(`found heroes matching "${term}"`)),
-    catchError(this.handleError<Hero[]>('searchHeroes', []))
-  );
-}
-  /* this was mocking a http service by using rxjs 'of'
-  getHeroes(): Observable<Hero[]> {
-    // Todo: send the message _after_ fetching the heroes
-    this.messageService.add('HeroService: fetched heroes');
-    return of(HEROES);
-  }
-  */
-
-  /* this was mocking a http service by using rxjs 'of'
-  getHero(id: number): Observable<Hero> {
-    // Todo: send the message _after_ fetching the hero
-    // NOTE: backticks used here to embed the id
-    this.messageService.add(`HeroService: fetched hero id=${id}`);
-    return of(HEROES.find(hero => hero.id === id));
-  }
-  */
-
-  /* pre- observables:
-  getHeroes(): Hero[] {
-    return HEROES;
-  }
-  */
 
   /** Log a HeroService message with the MessageService */
   private log(message: string) {

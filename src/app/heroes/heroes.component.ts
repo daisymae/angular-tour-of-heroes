@@ -25,7 +25,7 @@ export class HeroesComponent implements OnInit {
   */
   getHeroes(): void {
     this.heroService.getHeroes()
-        .subscribe(heroes => this.heroes = heroes);
+      .subscribe(heroes => this.heroes = heroes);
   }
 
   add(name: string): void {
@@ -42,16 +42,4 @@ export class HeroesComponent implements OnInit {
     this.heroService.deleteHero(hero).subscribe();
   }
 
-  /* original; non-observable method.
-  This will not work in a real app.
-    You're getting away with it now because the service currently returns mock heroes.
-    But soon the app will fetch heroes from a remote server, which is an inherently asynchronous operation.
-  getHeroes(): void {
-    this.heroes = this.heroService.getHeroes();
-  }
-*/
-/* no longer needed
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero;
-  } */
 }
